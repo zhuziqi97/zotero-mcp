@@ -108,6 +108,10 @@ TOOLSETS: dict[str, frozenset[str]] = {
             "zotero_get_pdf_outline",
         }
     ),
+    # Meaning-based retrieval. Kept in the default profile for backwards
+    # compatibility, but grouped so a lightweight deployment can turn it off
+    # without changing the normal default surface.
+    "semantic": frozenset({"zotero_semantic_search"}),
     # The ChatGPT deep-research connector contract, which requires tools named
     # exactly ``search`` and ``fetch``. Meaningless over stdio, so this group
     # is transport-scoped rather than listed in DEFAULT_ON; see
@@ -118,14 +122,16 @@ TOOLSETS: dict[str, frozenset[str]] = {
 #: Toolsets enabled when ``ZOTERO_MCP_TOOLSETS`` is unset.
 #:
 #: The default profile keeps groups that pair directly with core workflows
-#: (area annotations need page geometry; semantic search needs a way to
-#: report on its index) and drops groups that need external services, serve
-#: maintenance rather than research, or apply only to some users.
+#: (area annotations need page geometry; semantic search and its status/update
+#: helpers are part of the historical default surface) and drops groups that
+#: need external services, serve maintenance rather than research, or apply
+#: only to some users.
 DEFAULT_ON: frozenset[str] = frozenset(
     {
         "libraries",
         "search-admin",
         "pdf-geometry",
+        "semantic",
     }
 )
 

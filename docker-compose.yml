@@ -1,0 +1,51 @@
+services:
+  zotero-mcp:
+    build:
+      context: .
+      args:
+        # Keep this deployment keyword/PDF capable without installing the
+        # ChromaDB, sentence-transformers, and embedding-provider stack.
+        INSTALL_EXTRAS: ""
+    image: zotero-mcp:local-core
+    container_name: zotero-mcp
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      ZOTERO_LOCAL: "true"
+      ZOTERO_DB_PATH: /zotero/zotero.sqlite
+      # `none` removes all optional groups. The explicit connector negation
+      # prevents HTTP transport from adding the semantic-index-backed
+      # ChatGPT search/fetch compatibility tools.
+      ZOTERO_MCP_TOOLSETS: none,-chatgpt-connector
+    volumes:
+      - zotero-mcp-config:/home/app/.config/zotero-mcp
+      - /home/liusuo/Zotero:/zotero:ro
+    command:
+      - serve
+      - --transport
+      - streamable-http
+      - --host
+      - 127.0.0.1
+      - --port
+      - "18473"
+
+  tunnel-client:
+    image: ghcr.io/openai/tunnel-client:v0.0.14
+    container_name: zotero-mcp-tunnel
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      - zotero-mcp
+    environment:
+      # Supply these from the ignored `.env.tunnel` file or the shell. Empty
+      # values intentionally let `docker compose config` run before the
+      # Platform tunnel has been created; the client itself will report the
+      # missing credential at startup.
+      CONTROL_PLANE_API_KEY: ${CONTROL_PLANE_API_KEY:-}
+      CONTROL_PLANE_TUNNEL_ID: ${CONTROL_PLANE_TUNNEL_ID:-}
+      MCP_SERVER_URL: http://127.0.0.1:18473/mcp
+      LOG_LEVEL: info
+      LOG_FORMAT: json
+      HEALTH_LISTEN_ADDR: 127.0.0.1:18474
+volumes:
+  zotero-mcp-config:

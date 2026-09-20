@@ -28,6 +28,7 @@ from zotero_mcp.toolsets import (
 )
 
 CONNECTOR = "chatgpt-connector"
+SEMANTIC = "semantic"
 
 
 class TestResolveEnabled:
@@ -100,6 +101,11 @@ class TestToolsetRegistry:
 
     def test_default_on_names_are_real_groups(self):
         assert DEFAULT_ON <= set(TOOLSETS)
+
+    def test_semantic_search_is_optional_but_default_on(self):
+        assert SEMANTIC in DEFAULT_ON
+        assert TOOLSETS[SEMANTIC] == {"zotero_semantic_search"}
+        assert SEMANTIC not in resolve_enabled("none", transport="streamable-http")
 
     def test_registry_matches_live_tools(self):
         """Every name in TOOLSETS must still be a registered tool."""

@@ -33,6 +33,7 @@ group name is an error at startup rather than a silent no-op.
 | `relations` | off | Explicit item-to-item "related items" links |
 | `libraries` | **on** | List and switch between personal/group libraries |
 | `search-admin` | **on** | Build and inspect the semantic search index |
+| `semantic` | **on** | Search by meaning with the embedding index |
 | `pdf-geometry` | **on** | Page layout and PDF outline — pairs with area annotations |
 | `chatgpt-connector` | auto | The `search`/`fetch` pair required by ChatGPT deep research |
 
@@ -40,7 +41,10 @@ group name is an error at startup rather than a silent no-op.
 server is served over `streamable-http` or `sse` (how ChatGPT reaches it) and
 stays off for `stdio`. Name it explicitly to override either way.
 
-Anything not listed above is **core** and always available.
+Anything not listed above is **core** and always available. The `semantic`
+group can be disabled for a deployment that intentionally uses keyword and
+metadata search only; `search-admin` controls the separate index maintenance
+tools.
 
 **Note:** a disabled tool is genuinely absent — not merely hidden — so the
 model cannot call it. If you rely on a capability, enable its group.

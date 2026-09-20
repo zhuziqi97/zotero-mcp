@@ -41,6 +41,7 @@ Thumbs.db
 # Environment variables
 .env
 .env.local
+.env.tunnel
 
 # Lock files
 uv.lock

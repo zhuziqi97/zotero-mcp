@@ -36,7 +36,8 @@ RUN pip install $PIP_OPTS build hatchling \
 
 # Run as a non-root user (defense-in-depth for multi-tenant hosts)
 RUN useradd --create-home --shell /usr/sbin/nologin app \
-    && chown -R app:app /app
+    && mkdir -p /home/app/.config/zotero-mcp \
+    && chown -R app:app /app /home/app
 USER app
 
 # Default to MCP server mode; can switch to CLI via ZOTERO_APP=cli.
