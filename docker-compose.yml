@@ -13,10 +13,10 @@ services:
     environment:
       ZOTERO_LOCAL: "true"
       ZOTERO_DB_PATH: /zotero/zotero.sqlite
-      # `none` removes all optional groups. The explicit connector negation
-      # prevents HTTP transport from adding the semantic-index-backed
-      # ChatGPT search/fetch compatibility tools.
-      ZOTERO_MCP_TOOLSETS: none,-chatgpt-connector
+      # Use upstream's ChatGPT connector tools. Its `search` tries semantic
+      # retrieval first and falls back to Zotero keyword search in this core
+      # image, which intentionally has no semantic dependencies or index.
+      ZOTERO_MCP_TOOLSETS: chatgpt-connector
     volumes:
       - zotero-mcp-config:/home/app/.config/zotero-mcp
       - /home/liusuo/Zotero:/zotero:ro

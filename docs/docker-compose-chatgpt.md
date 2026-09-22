@@ -3,8 +3,9 @@
 This deployment runs Zotero MCP locally and connects it to ChatGPT through
 OpenAI's outbound-only Secure MCP Tunnel. It deliberately uses the core image:
 keyword search, metadata, collections, PDF/full-text reading, and Zotero
-write tools are available; semantic search and the index-backed `search` /
-`fetch` compatibility tools are disabled.
+write tools are available. The upstream ChatGPT-compatible `search` / `fetch`
+tools are enabled; `search` falls back to Zotero keyword matching because this
+core image has no semantic dependencies or index.
 
 ## 1. Prepare the local tunnel settings
 
